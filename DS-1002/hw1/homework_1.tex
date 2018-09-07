@@ -1,0 +1,266 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{textgreek}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework\ \#2}
+\newcommand{\hmwkDueDate}{February 12, 2014}
+\newcommand{\hmwkClass}{DS-1002}
+\newcommand{\hmwkClassTime}{Section A}
+\newcommand{\hmwkClassInstructor}{Professor Ling}
+\newcommand{\hmwkAuthorName}{\textbf{Cody Fizette}}
+\newcommand{\zed}{\mathbb{Z}}
+\newcommand{\prob}{\mathbb{P}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+\maketitle
+\pagebreak
+
+\begin{homeworkProblem}
+	Justify the following results.
+	\begin{enumerate}
+	\item $A\cap \left(B\cup C\right)=\left(A\cap B\right)\cup \left(A\cap C\right)$
+	\item $\left(\bigcup\limits_{i=1}^{\infty} A_i\right)^c=\bigcap\limits_{i=1}^{\infty} A_i^c$
+	\\
+	
+	\end{enumerate}
+	
+	\textbf{Solution 1.1}
+	
+	To prove that $A\cap \left(B\cup C\right)=\left(A\cap B\right)\cup \left(A\cap C\right)$, we must show that:
+	
+	\[
+		1.\;A\cap \left(B\cup C\right)\subseteq \left(A\cap B\right)\cup \left(A\cap C\right)
+	\]
+	\[
+		2.\;\left(A\cap B\right)\cup \left(A\cap C\right)\subseteq A\cap \left(B\cup C\right)	
+	\]
+	
+	Let $x\in A\cap \left(B\cup C\right)$.
+	Then $x\in A$ and either $x\in B$ or $x\in C$.
+	Without loss of generality assume that $x\in B$. Then $x\in A\cap B$. Since $A\cap B\subseteq \left(A\cap B\right)\cup \left(A\cap C\right)$, we 		conclude that $x\in \left(A\cap B\right)\cup \left(A\cap C\right)$, thus showing that $A\cap \left(B\cup C\right)\subseteq \left(A\cap B\right)			\cup \left(A\cap C\right)$.
+	\\
+	
+	Next, let $y\in \left(A\cap B\right)\cup \left(A\cap C\right)\subseteq A\cap \left(B\cup C\right)$. Then either $y\in A$ and
+	$y\in B$ or $y\in A$ and $y\in C$. Without loss of generality assume that $y\in A$ and $y\in B$. Then $y\in B\cup C$. 
+	Thus $y\in A\cap \left(B\cup C\right)$. 
+	So therefore $\left(A\cap B\right)\cup \left(A\cap C\right)\subseteq A\cap \left(B\cup C\right)$ 
+	\\
+	
+	Since $A\cap \left(B\cup C\right)\subseteq \left(A\cap B\right)\cup \left(A\cap C\right)$ and $\left(A\cap B\right)\cup \left(A\cap C\right)\subseteq A\cap \left(B\cup C\right)$,
+	we conclude that $A\cap \left(B\cup C\right)=\left(A\cap B\right)\cup \left(A\cap C\right)$.
+	\\
+	
+	
+	\textbf{Solution 1.2}
+	
+	Observe that
+	
+		\begin{align*}
+			x\in \left(\bigcup\limits_{i=1}^{\infty} A_i\right)^c
+			&\iff x\notin \bigcup\limits_{i=1}^{\infty} A_i && \text{By definition of set complement}
+			\\
+			&\iff x\notin A_i,\; \forall i\in \zed^+ && \text{By definition of set union}
+			\\
+			&\iff x\in A_i^c,\; \forall i\in \zed^+ && \text{By definition of set complement}
+			\\
+			&\iff x\in \bigcap\limits_{i=1}^{\infty} A_i^c && \text{By definition of set intersection}
+		\end{align*}
+		
+	Thus $\left(\bigcup\limits_{i=1}^{\infty} A_i\right)^c=\bigcap\limits_{i=1}^{\infty} A_i^c$
+	\\
+				
+\end{homeworkProblem}
+
+%Problem 2
+\begin{homeworkProblem}
+	Given a sample space \textOmega \: with $n$ elements, compute the total number of distinct subsets of \textOmega .
+	\\
+	
+	\textbf{Solution 2}
+	\\
+	
+	When constructing a subset $A$, $\forall x_i \in \Omega$, either $x_i \in A$ or $x_i \notin A$. Since there are $n$ elements in 
+	\textOmega \: and two possibilities for each element, by the Fundamental Counting Principle there are $2^n$ distinct subsets of \textOmega .
+
+\end{homeworkProblem}
+
+\pagebreak
+
+%Problem 3
+\begin{homeworkProblem}
+
+\end{homeworkProblem}
+	Two players, \textit{A} and \textit{B}, alternately and independently flip a coin and the first player to obtain a head wins. Asume player
+	 \textit{A} flips first.
+	 \\
+	 
+	 \begin{enumerate}
+	 	\item If the coin is fair, what is the probability that \textit{A} wins?
+	 	\item Suppose that $\prob \left(head\right)=p$. What is the probability that \textit{A} wins?
+	 	\\
+	 	
+	 \end{enumerate}
+	 
+	 \textbf{Solution 3.1}
+	 \\
+	 
+	 \textit{A} wins if the first head occurs on an odd numbered throw. Thus:
+	 
+	 \begin{align*}
+	 	\prob \left(A\: wins\right)
+	 	&= \sum_{i=0}^{\infty} \left(\frac{1}{2}\right)^{2i} \left(\frac{1}{2}\right)
+	 	\\
+	 	&= \frac{1}{2} \sum_{i=0}^{\infty} \left(\frac{1}{4}\right)^i
+	 	\\
+	 	&= \frac{1}{2} \left(\frac{1}{1-\frac{1}{4}}\right) && \text{Sum of geometric series}
+	 	\\
+	 	&= \frac{1}{2}\cdot \frac{4}{3} 
+	 	\\
+	 	&= \frac{2}{3}
+	 \end{align*}
+	 \\
+	 
+	 \textbf{Solution 3.2}
+	 \\
+	 
+	 Let $q=1-p$
+	 
+	 \begin{align*}
+	 	\prob \left(A\: wins\right)
+	 	&= \sum_{i=0}^{\infty} \left(1-p\right)^{2i} \left(p\right)
+	 	\\
+	 	&= p \sum_{i=0}^{\infty} \left(q^2\right)^i
+	 	\\
+	 	&= \frac{p}{1-q^2} && \text{Sum of geometric series}
+	 \end{align*}
+	 
+	 
+
+\end{document}
