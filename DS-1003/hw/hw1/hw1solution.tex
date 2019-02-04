@@ -179,15 +179,16 @@ And that
 
 \item Find the distribution of $Z = \alpha_i X_i + \alpha_j X_j$, for $i\neq j$ and $1 \leq i, j \leq d$. The answer will belong to a familiar class of distribution. Report the answer by identifying this class of distribution and specifying the parameters.\\
 
+\textit{(Answer)}\\\\
 Z is normally distributed.\\
 $Z \sim \cn (\alpha_i \mu_i + \alpha_j \mu_j,\ \alpha_i^2\Sigma_{i,i} + \alpha_j^2\Sigma_{j,j} + 2\alpha_i\alpha_j\Sigma_{i,j})$
 \\
 
-\item (Optional) Assume $W$ and $R$ are two Gaussian distributed random variables. Is $W+R$ still Gaussian? 
+\item (Optional) Assume $W$ and $R$ are two Gaussian distributed random variables. Is $W+R$ still Gaussian? \\
 
-No
+\textit{(Answer)} No\\\
 
-Proof
+Proof:
 
 Let $W \sim \cn (\mu, \Sigma)$ Now let $R = -W$. Then it follows that $R \sim \cn (\mu, \Sigma)$. However,
 \begin{align*}
@@ -199,12 +200,23 @@ Thus $W+R$ is not Gaussian.
 
 \subsection{Linear Algebra}
 \begin{enumerate}
-\item Let $A$ be a $d\times d$ matrix with rank $k$.  Consider the set $S_A:=\{x \in \reals^d|Ax = 0\}$. What is the dimension of $S_A$?
+\item Let $A$ be a $d\times d$ matrix with rank $k$.  Consider the set $S_A:=\{x \in \reals^d|Ax = 0\}$. What is the dimension of $S_A$?\\
+
+\textit{(Answer)}\\\\
+$dim(S_A) = d-k.$\\
+
 \item Assume $S_v$ is a $k$ dimensional subspace in $\reals^d$ and $v_1,v_2,\cdots, v_k$ form an orthonormal basis of $S_v$. Let $w$ be an arbitrary vector in $\reals^d$. Find 
 \[
 x^* = \underset{x\in S_v}{\text{argmin}}\|w-x\|_2,
 \]
-where $\|w-x\|_2$ is the Euclidean distance between $w$ and $x$. Express $x^*$ as a function of $v_1, v_2, \dots, v_k$ and $w$.
+where $\|w-x\|_2$ is the Euclidean distance between $w$ and $x$. Express $x^*$ as a function of $v_1, v_2, \dots, v_k$ and $w$.\\
+
+\textit{(Answer)}
+\begin{align*}
+x^* &= \underset{x\in S_v}{\text{argmin}}\|w-x\|_2,\\
+&= proj_{s_v}(w),\\
+&= \sum_{i=1}^d(\frac{w \cdot v_i}{v_i \cdot v_i})
+\end{align*}
 
 \item (Optional) Continuing from above, $x^*$ can be expressed as 
 \[
