@@ -23,7 +23,13 @@ def feature_normalization(train, test):
         train_normalized - training set after normalization
         test_normalized - test set after normalization
     """
-    # TODO
+    min_arr = np.amin(train, axis=0)
+    range_arr = np.amax(train, axis=0) - min_arr
+
+    train_normalized = (train-min_arr)/range_arr
+    test_normalized = (test-min_arr)/range_arr
+
+    return train_normalized, test_normalized
 
 
 #######################################
