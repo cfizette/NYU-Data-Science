@@ -215,7 +215,7 @@ where $\|w-x\|_2$ is the Euclidean distance between $w$ and $x$. Express $x^*$ a
 \begin{align*}
 x^* &= \underset{x\in S_v}{\text{argmin}}\|w-x\|_2,\\
 &= proj_{s_v}(w),\\
-&= \sum_{i=1}^d(\frac{w \cdot v_i}{v_i \cdot v_i})
+&= \sum_{i=1}^d\frac{w \cdot v_i}{v_i \cdot v_i}w_i
 \end{align*}
 
 \item (Optional) Continuing from above, $x^*$ can be expressed as 
