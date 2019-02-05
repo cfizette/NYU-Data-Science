@@ -222,7 +222,31 @@ x^* &= \underset{x\in S_v}{\text{argmin}}\|w-x\|_2,\\
 \[
 x^* = Mw,
 \]
-where $M$ is a $d\times d$ matrix. Prove that such an $M$ always exists or  more precisely find an expression for $M$ as a function of $v_1,v_2,\cdots, v_k$. Compute the eigenvalues and one set of eigenvectors of $M$ corresponding to the nonzero eigenvalues.
+where $M$ is a $d\times d$ matrix. Prove that such an $M$ always exists or  more precisely find an expression for $M$ as a function of $v_1,v_2,\cdots, v_k$. Compute the eigenvalues and one set of eigenvectors of $M$ corresponding to the nonzero eigenvalues.\\
+
+\textit{(Proof that M exists)}\\
+
+Let $V=[v_1, v_2, ..., v_k]$ Since $x^* \in S_v$, there exists some $\hat{w} \in S_v$ such that
+\begin{align*}
+x^* &= Mw = V\hat{w}.
+\end{align*}
+
+Since $\hat{x}$ is orthogonal to $S_v$,
+\begin{align*}
+V^T(w-x^*)=0.
+\end{align*}
+
+Continuing we get
+\begin{align*}
+V^T(w-x^*) &= 0,\\
+V^T(w-V\hat{w}) &= 0,\\
+V^Tw - v^TV\hat{w} &= 0,\\
+V^TV\hat{w} &= V^Tw,\\
+\hat{w} &= (V^TV)^{-1}V^Tw,\\
+x^* &= V(V^TV)^{-1}V^Tw,\\
+M &= V(V^TV)^{-1}V^T.
+\end{align*}
+
 \end{enumerate}
 
 \section{Linear Regression}
