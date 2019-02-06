@@ -46,8 +46,8 @@ def compute_square_loss(X, y, theta):
     Returns:
         loss - the average square loss, scalar
     """
-    loss = 0 #Initialize the average square loss
-    #TODO
+    y_pred = np.matmul(X,theta)
+    return np.mean(np.square(y - y_pred))
 
 
 #######################################
@@ -64,7 +64,10 @@ def compute_square_loss_gradient(X, y, theta):
     Returns:
         grad - gradient vector, 1D numpy array of size (num_features)
     """
-    #TODO
+    y_pred = np.matmul(X, theta)
+    n = len(y)
+    #TODO: check that this is the true gradient.
+    return (2/n) * np.matmul(X.T, y_pred - y)
 
 
 #######################################
@@ -106,7 +109,15 @@ def grad_checker(X, y, theta, epsilon=0.01, tolerance=1e-4):
     true_gradient = compute_square_loss_gradient(X, y, theta) #The true gradient
     num_features = theta.shape[0]
     approx_grad = np.zeros(num_features) #Initialize the gradient we approximate
-    #TODO
+    
+    hs = np.eye(num_features)
+    
+    for i, h in enumerate(hs):
+        approx_grad[i] = (compute_square_loss(X, y, theta + epsilon*h) - compute_square_loss(X, y, theta - epsilon*h))/(2*epsilon)
+        
+    dist = np.linalg.norm(approx_grad - true_gradient)
+    
+    return dist <= tolerance
 
 
 #######################################

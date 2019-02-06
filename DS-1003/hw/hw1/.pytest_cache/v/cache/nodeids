@@ -1,0 +1,4 @@
+[
+  "hw1_code_tests.py::test_compute_square_loss",
+  "hw1_code_tests.py::test_compute_square_loss_gradient"
+]
