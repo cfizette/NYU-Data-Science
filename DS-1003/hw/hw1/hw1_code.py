@@ -77,7 +77,7 @@ def compute_square_loss_gradient(X, y, theta):
 #easy to check that the gradient calculation is correct using the
 #definition of gradient.
 #See http://ufldl.stanford.edu/wiki/index.php/Gradient_checking_and_advanced_optimization
-def grad_checker(X, y, theta, epsilon=0.01, tolerance=1e-4):
+def grad_checker(loss_func, loss_grad_func, X, y, theta, epsilon=0.01, tolerance=1e-4):
     """Implement Gradient Checker
     Check that the function compute_square_loss_gradient returns the
     correct gradient for the given X, y, and theta.
@@ -106,14 +106,14 @@ def grad_checker(X, y, theta, epsilon=0.01, tolerance=1e-4):
     Return:
         A boolean value indicating whether the gradient is correct or not
     """
-    true_gradient = compute_square_loss_gradient(X, y, theta) #The true gradient
+    true_gradient = loss_grad_func(X, y, theta) #The true gradient
     num_features = theta.shape[0]
     approx_grad = np.zeros(num_features) #Initialize the gradient we approximate
     
     hs = np.eye(num_features)
     
     for i, h in enumerate(hs):
-        approx_grad[i] = (compute_square_loss(X, y, theta + epsilon*h) - compute_square_loss(X, y, theta - epsilon*h))/(2*epsilon)
+        approx_grad[i] = (loss_func(X, y, theta + epsilon*h) - loss_func(X, y, theta - epsilon*h))/(2*epsilon)
         
     dist = np.linalg.norm(approx_grad - true_gradient)
     
