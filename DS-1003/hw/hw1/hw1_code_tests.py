@@ -17,4 +17,5 @@ def test_compute_square_loss_gradient():
     theta = np.array([2,3])
     y = np.array([1,2])
     
-    assert grad_checker(compute_square_loss, compute_square_loss_gradient, X, y, theta) == True
+    assert generic_gradient_checker( X, y, theta, compute_square_loss, compute_square_loss_gradient) == True
+    assert grad_checker(X, y, theta) == True

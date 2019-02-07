@@ -1,1 +1,13 @@
 .csv
+
+# Python stuff
+__pychache__
+
+# IPython atrifacts and shit
+.ipynb_checkpoints
+
+# Pytest 
+.pytest_cache
+
+# Not sure where this comes from
+.cache

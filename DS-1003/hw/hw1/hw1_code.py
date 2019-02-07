@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import pandas as pd
+import warnings
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
@@ -47,6 +48,7 @@ def compute_square_loss(X, y, theta):
         loss - the average square loss, scalar
     """
     y_pred = np.matmul(X,theta)
+
     return np.mean(np.square(y - y_pred))
 
 
@@ -66,7 +68,6 @@ def compute_square_loss_gradient(X, y, theta):
     """
     y_pred = np.matmul(X, theta)
     n = len(y)
-    #TODO: check that this is the true gradient.
     return (2/n) * np.matmul(X.T, y_pred - y)
 
 
@@ -77,7 +78,7 @@ def compute_square_loss_gradient(X, y, theta):
 #easy to check that the gradient calculation is correct using the
 #definition of gradient.
 #See http://ufldl.stanford.edu/wiki/index.php/Gradient_checking_and_advanced_optimization
-def grad_checker(loss_func, loss_grad_func, X, y, theta, epsilon=0.01, tolerance=1e-4):
+def grad_checker(X, y, theta, epsilon=0.01, tolerance=1e-4):
     """Implement Gradient Checker
     Check that the function compute_square_loss_gradient returns the
     correct gradient for the given X, y, and theta.
@@ -106,14 +107,14 @@ def grad_checker(loss_func, loss_grad_func, X, y, theta, epsilon=0.01, tolerance
     Return:
         A boolean value indicating whether the gradient is correct or not
     """
-    true_gradient = loss_grad_func(X, y, theta) #The true gradient
+    true_gradient = compute_square_loss_gradient(X, y, theta) #The true gradient
     num_features = theta.shape[0]
     approx_grad = np.zeros(num_features) #Initialize the gradient we approximate
     
     hs = np.eye(num_features)
     
     for i, h in enumerate(hs):
-        approx_grad[i] = (loss_func(X, y, theta + epsilon*h) - loss_func(X, y, theta - epsilon*h))/(2*epsilon)
+        approx_grad[i] = (compute_square_loss(X, y, theta + epsilon*h) - compute_square_loss(X, y, theta - epsilon*h))/(2*epsilon)
         
     dist = np.linalg.norm(approx_grad - true_gradient)
     
@@ -129,7 +130,18 @@ def generic_gradient_checker(X, y, theta, objective_func, gradient_func, epsilon
     gradient for objective_func(X, y, theta).
     Eg: In LSR, the objective_func = compute_square_loss, and gradient_func = compute_square_loss_gradient
     """
-    #TODO
+    true_gradient = gradient_func(X, y, theta) #The true gradient
+    num_features = theta.shape[0]
+    approx_grad = np.zeros(num_features) #Initialize the gradient we approximate
+    
+    hs = np.eye(num_features)
+    
+    for i, h in enumerate(hs):
+        approx_grad[i] = (objective_func(X, y, theta + epsilon*h) - objective_func(X, y, theta - epsilon*h))/(2*epsilon)
+        
+    dist = np.linalg.norm(approx_grad - true_gradient)
+    
+    return dist <= tolerance
 
 
 #######################################
@@ -155,7 +167,25 @@ def batch_grad_descent(X, y, alpha=0.1, num_step=1000, grad_check=False):
     theta_hist = np.zeros((num_step+1, num_features)) #Initialize theta_hist
     loss_hist = np.zeros(num_step+1) #Initialize loss_hist
     theta = np.zeros(num_features) #Initialize theta
-    #TODO
+    
+    for i in range(num_step+1):
+        loss_hist[i] = compute_square_loss(X, y, theta)
+        theta_hist[i] = theta
+
+        grad = compute_square_loss_gradient(X, y, theta)
+
+        if grad_check:
+            if not grad_checker(X, y, theta):
+                warnings.warn('Error computing gradient on iteration {}'.format(i))
+                return theta_hist, loss_hist
+
+        theta -= grad*alpha
+
+    return theta_hist, loss_hist
+
+
+
+
 
 
 #######################################
