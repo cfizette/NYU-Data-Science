@@ -49,6 +49,8 @@ def compute_square_loss(X, y, theta):
     """
     y_pred = np.matmul(X,theta)
 
+    #return (1/len(y)) * np.matmul((y_pred - y).T, (y_pred - y))
+
     return np.mean(np.square(y - y_pred))
 
 
@@ -178,20 +180,43 @@ def batch_grad_descent(X, y, alpha=0.1, num_step=1000, grad_check=False):
             if not grad_checker(X, y, theta):
                 warnings.warn('Error computing gradient on iteration {}'.format(i))
                 return theta_hist, loss_hist
-
+ 
         theta -= grad*alpha
 
+
     return theta_hist, loss_hist
-
-
-
-
 
 
 #######################################
 ### Backtracking line search
 #Check http://en.wikipedia.org/wiki/Backtracking_line_search for details
-#TODO
+def check_ag_condition(X, y, theta, alpha, c, gradient):
+    # Checks Armijo–Goldstein condition for linear regression
+    # Returns true if condition not satisfied
+    grad_norm = np.linalg.norm(gradient)
+    return compute_square_loss(X, y, theta) - compute_square_loss(X, y, theta-alpha*gradient) < c*alpha*grad_norm
+
+
+def backtracking_line_search(X, y, max_alpha=1, b=0.5, c=0.5, num_step=1000):
+    num_instances, num_features = X.shape[0], X.shape[1]
+    theta_hist = np.zeros((num_step+1, num_features)) #Initialize theta_hist
+    loss_hist = np.zeros(num_step+1) #Initialize loss_hist
+    theta = np.zeros(num_features) #Initialize theta
+
+    for i in range(num_step + 1):
+        alpha = max_alpha
+        loss_hist[i] = compute_square_loss(X, y, theta)
+        theta_hist[i] = theta
+
+        grad = compute_square_loss_gradient(X, y, theta)
+
+        # While Armijo-Goldstein condition is not satisfied, shrink alpha
+        while check_ag_condition(X, y, theta, alpha, c, grad):
+            alpha = b*alpha
+
+        theta -= alpha*grad
+
+    return theta_hist, loss_hist
 
 
 #######################################
@@ -209,7 +234,9 @@ def compute_regularized_square_loss_gradient(X, y, theta, lambda_reg):
     Returns:
         grad - gradient vector, 1D numpy array of size (num_features)
     """
-    #TODO
+    square_loss_gradient = compute_square_loss_gradient(X, y, theta)
+    regularization_term = 2 * lambda_reg * theta.T
+    return square_loss_gradient + regularization_term
 
 
 #######################################
@@ -232,7 +259,16 @@ def regularized_grad_descent(X, y, alpha=0.05, lambda_reg=10**-2, num_step=1000)
     theta = np.zeros(num_features) #Initialize theta
     theta_hist = np.zeros((num_step+1, num_features)) #Initialize theta_hist
     loss_hist = np.zeros(num_step+1) #Initialize loss_hist
-    #TODO
+    
+    for i in range(num_step+1):
+        loss_hist[i] = compute_square_loss(X, y, theta)
+        theta_hist[i] = theta
+
+        grad = compute_regularized_square_loss_gradient(X, y, theta, lambda_reg)
+
+        theta -= grad*alpha
+
+    return theta_hist, loss_hist
 
 
 #######################################
