@@ -191,34 +191,42 @@ def batch_grad_descent(X, y, alpha=0.1, num_step=1000, grad_check=False):
 #######################################
 ### Backtracking line search
 #Check http://en.wikipedia.org/wiki/Backtracking_line_search for details
-def check_ag_condition(X, y, theta, current_loss, alpha, c, gradient, grad_norm):
+def check_ag_condition(X, y, theta, current_loss, alpha, c, p, grad_norm):
     # Checks Armijo–Goldstein condition for linear regression
     # Returns true if condition not satisfied
-    return current_loss - compute_square_loss(X, y, theta-alpha*gradient) < c*alpha*grad_norm
+    return current_loss - compute_square_loss(X, y, theta-alpha*p) < c*alpha*grad_norm
 
+def normalize(v):
+    norm = np.linalg.norm(v)
+    if norm == 0: 
+       return v
+    return v / norm , norm
 
 def backtracking_line_search(X, y, max_alpha=1, b=0.5, c=0.5, num_step=1000):
     num_instances, num_features = X.shape[0], X.shape[1]
     theta_hist = np.zeros((num_step+1, num_features)) #Initialize theta_hist
     loss_hist = np.zeros(num_step+1) #Initialize loss_hist
     theta = np.zeros(num_features) #Initialize theta
+    alpha_hist=[]
 
     for i in range(num_step + 1):
         alpha = max_alpha
         loss_hist[i] = compute_square_loss(X, y, theta)
         theta_hist[i] = theta
 
+        #precompute to avoid unnecessary computation
+        current_loss = compute_square_loss(X, y, theta) 
         grad = compute_square_loss_gradient(X, y, theta)
+        p, grad_norm = normalize(grad)
 
-        # While Armijo-Goldstein condition is not satisfied, shrink alpha
-        current_loss = compute_square_loss(X, y, theta) #precompute to avoid unnecessary computation
-        grad_norm = np.linalg.norm(grad)
+        # While Armijo-Goldstein condition is not satisfied, shrink alpha 
         while check_ag_condition(X, y, theta, current_loss, alpha, c, grad, grad_norm):
             alpha = b*alpha
 
-        theta -= alpha*grad
+        alpha_hist.append(alpha)
+        theta -= alpha*p
 
-    return theta_hist, loss_hist
+    return theta_hist, loss_hist, alpha_hist
 
 
 #######################################
