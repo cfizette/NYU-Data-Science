@@ -4,6 +4,7 @@ import pandas as pd
 import warnings
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+import tqdm
 
 
 ### Assignment Owner: Tian Wang
@@ -190,11 +191,10 @@ def batch_grad_descent(X, y, alpha=0.1, num_step=1000, grad_check=False):
 #######################################
 ### Backtracking line search
 #Check http://en.wikipedia.org/wiki/Backtracking_line_search for details
-def check_ag_condition(X, y, theta, alpha, c, gradient):
+def check_ag_condition(X, y, theta, current_loss, alpha, c, gradient, grad_norm):
     # Checks Armijo–Goldstein condition for linear regression
     # Returns true if condition not satisfied
-    grad_norm = np.linalg.norm(gradient)
-    return compute_square_loss(X, y, theta) - compute_square_loss(X, y, theta-alpha*gradient) < c*alpha*grad_norm
+    return current_loss - compute_square_loss(X, y, theta-alpha*gradient) < c*alpha*grad_norm
 
 
 def backtracking_line_search(X, y, max_alpha=1, b=0.5, c=0.5, num_step=1000):
@@ -211,7 +211,9 @@ def backtracking_line_search(X, y, max_alpha=1, b=0.5, c=0.5, num_step=1000):
         grad = compute_square_loss_gradient(X, y, theta)
 
         # While Armijo-Goldstein condition is not satisfied, shrink alpha
-        while check_ag_condition(X, y, theta, alpha, c, grad):
+        current_loss = compute_square_loss(X, y, theta) #precompute to avoid unnecessary computation
+        grad_norm = np.linalg.norm(grad)
+        while check_ag_condition(X, y, theta, current_loss, alpha, c, grad, grad_norm):
             alpha = b*alpha
 
         theta -= alpha*grad
