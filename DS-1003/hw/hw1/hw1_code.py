@@ -207,7 +207,6 @@ def backtracking_line_search(X, y, max_alpha=1, b=0.5, c=0.5, num_step=1000):
     theta_hist = np.zeros((num_step+1, num_features)) #Initialize theta_hist
     loss_hist = np.zeros(num_step+1) #Initialize loss_hist
     theta = np.zeros(num_features) #Initialize theta
-    alpha_hist=[]
 
     for i in range(num_step + 1):
         alpha = max_alpha
@@ -223,10 +222,9 @@ def backtracking_line_search(X, y, max_alpha=1, b=0.5, c=0.5, num_step=1000):
         while check_ag_condition(X, y, theta, current_loss, alpha, c, grad, grad_norm):
             alpha = b*alpha
 
-        alpha_hist.append(alpha)
         theta -= alpha*p
 
-    return theta_hist, loss_hist, alpha_hist
+    return theta_hist, loss_hist
 
 
 #######################################
