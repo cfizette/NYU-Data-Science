@@ -4,10 +4,10 @@
 __pycache__/
 
 # IPython atrifacts and shit
-.ipynb_checkpoints
+.ipynb_checkpoints/
 
 # Pytest 
-.pytest_cache
+.pytest_cache/
 
 # Not sure where this comes from
 .cache
