@@ -1,4 +1,7 @@
 from hw1_code import *
+import pandas as pd 
+import numpy as np
+from numpy.testing import assert_array_almost_equal
 
 
 
@@ -19,3 +22,11 @@ def test_compute_square_loss_gradient():
     
     assert generic_gradient_checker( X, y, theta, compute_square_loss, compute_square_loss_gradient) == True
     assert grad_checker(X, y, theta) == True
+
+def test_gradient_descent():
+    df = pd.read_csv('data.csv')
+    X = df.drop('y', axis=1)
+    y = df.y
+
+    theta_hist, _ = regularized_grad_descent(X, y, alpha=0.01, num_step=2000)
+

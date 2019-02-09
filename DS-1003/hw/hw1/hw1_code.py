@@ -5,6 +5,7 @@ import warnings
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 import tqdm
+import math
 
 
 ### Assignment Owner: Tian Wang
@@ -25,6 +26,12 @@ def feature_normalization(train, test):
         train_normalized - training set after normalization
         test_normalized - test set after normalization
     """
+    # Remove columns with constant values
+    cols_to_delete = np.all(train==train[0,:], axis=0)
+    cols_to_delete = np.argwhere(cols_to_delete==True)
+    train = np.delete(train, cols_to_delete, 1)
+    test = np.delete(test, cols_to_delete, 1)
+
     min_arr = np.amin(train, axis=0)
     range_arr = np.amax(train, axis=0) - min_arr
 
@@ -281,7 +288,7 @@ def regularized_grad_descent(X, y, alpha=0.05, lambda_reg=10**-2, num_step=1000)
 
 #######################################
 ### Stochastic gradient descent
-def stochastic_grad_descent(X, y, alpha=0.01, lambda_reg=10**-2, num_epoch=1000):
+def stochastic_grad_descent(X, y, alpha=0.01, lambda_reg=10**-2, num_epoch=1000, C=0.1, averaged=False, eta_0=None):
     """
     In this question you will implement stochastic gradient descent with regularization term
 
@@ -306,7 +313,35 @@ def stochastic_grad_descent(X, y, alpha=0.01, lambda_reg=10**-2, num_epoch=1000)
 
     theta_hist = np.zeros((num_epoch, num_instances, num_features)) #Initialize theta_hist
     loss_hist = np.zeros((num_epoch, num_instances)) #Initialize loss_hist
-    #TODO
+
+    t=1
+    mode=alpha
+
+    for i in range(num_epoch):
+
+        for j, (x_j, y_j) in enumerate(zip(X, y)):
+            x_j = np.array([x_j])
+            y_j = np.array([y_j])
+            grad = compute_regularized_square_loss_gradient(x_j, y_j, theta, lambda_reg)
+
+            if mode == '1/sqrt(t)':
+                alpha = C/math.sqrt(t)
+            if mode == '1/t':
+                alpha = C/t
+            if eta_0:
+                alpha = eta_0/(1+eta_0*lambda_reg)
+
+            theta -= grad*alpha # Update theta
+            theta_hist[i,j] = theta
+            loss_hist[i,j] = compute_square_loss(X, y, theta)
+
+            t += 1
+
+    if averaged:
+        theta_hist = theta_hist.reshape((num_epoch*num_instances, num_features))
+        return theta_hist.mean(axis=0), loss_hist
+    return theta_hist, loss_hist
+    
 
 
 def main():
