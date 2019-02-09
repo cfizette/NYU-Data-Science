@@ -191,7 +191,6 @@ def batch_grad_descent(X, y, alpha=0.1, num_step=1000, grad_check=False):
  
         theta -= grad*alpha
 
-
     return theta_hist, loss_hist
 
 
@@ -324,6 +323,7 @@ def stochastic_grad_descent(X, y, alpha=0.01, lambda_reg=10**-2, num_epoch=1000,
             y_j = np.array([y_j])
             grad = compute_regularized_square_loss_gradient(x_j, y_j, theta, lambda_reg)
 
+            # Adaptive step size methods
             if mode == '1/sqrt(t)':
                 alpha = C/math.sqrt(t)
             if mode == '1/t':
